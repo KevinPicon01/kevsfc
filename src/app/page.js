@@ -1,10 +1,8 @@
 // app/page.jsx
 import Image from "next/image";
 import Link from "next/link";
-import { getLatestVideoIdFromChannel } from "./lib/youtube";
 
 const RED = "#e11d48"; // red-600
-const CHANNEL_ID = "UCUIjrgbNZn8rmUeAEguB_kQ";
 
 const SOCIALS = [
     { label: "YouTube", href: "https://www.youtube.com/channel/UCUIjrgbNZn8rmUeAEguB_kQ", icon: YouTubeIcon },
@@ -13,8 +11,8 @@ const SOCIALS = [
 ];
 
 export default async function Page() {
-    const latest = await getLatestVideoIdFromChannel(CHANNEL_ID);
-    const embedSrc = latest ? `https://www.youtube.com/embed/${latest}?rel=0` : "";
+
+    const latest =  `https://www.youtube.com/watch?v=zghNdJIAC5w`;
 
     return (
         <main className="relative min-h-screen bg-neutral-950 text-neutral-100 overflow-hidden">
@@ -54,12 +52,7 @@ export default async function Page() {
                             >
                                 Ver último video
                             </a>
-                            <a
-                                href="#now"
-                                className="inline-flex items-center rounded-lg border border-neutral-700 px-5 py-2.5 hover:bg-neutral-800 transition"
-                            >
-                                Reproducir aquí
-                            </a>
+                            
                         </div>
                     )}
                 </div>
@@ -71,20 +64,14 @@ export default async function Page() {
             <section id="now" className="mx-auto max-w-5xl px-4 pb-10">
                 <div className="rounded-xl overflow-hidden border border-neutral-800 bg-neutral-900/40">
                     <div className="aspect-video">
-                        {embedSrc ? (
                             <iframe
                                 className="h-full w-full"
-                                src={embedSrc}
                                 title="Último video de kevsfc"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowFullScreen
                                 loading="lazy"
+                                src="https://www.youtube.com/embed/zghNdJIAC5w?si=kCFWInL9XKmhz0PJ"
                             />
-                        ) : (
-                            <div className="h-full w-full grid place-items-center text-neutral-400 text-sm">
-                                No se pudo cargar el último video.
-                            </div>
-                        )}
                     </div>
                 </div>
             </section>
