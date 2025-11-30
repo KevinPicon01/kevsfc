@@ -12,7 +12,7 @@ const SOCIALS = [
 
 export default async function Page() {
 
-    const latest =  `https://youtu.be/ih9gfzDcpTs`;
+    const latest =  `https://www.youtube.com/watch?v=zghNdJIAC5w`;
 
     return (
         <main className="relative min-h-screen bg-neutral-950 text-neutral-100 overflow-hidden">
@@ -52,7 +52,7 @@ export default async function Page() {
                             >
                                 Ver último video
                             </a>
-
+                            
                         </div>
                     )}
                 </div>
@@ -70,7 +70,7 @@ export default async function Page() {
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowFullScreen
                                 loading="lazy"
-                                src="https://www.youtube.com/embed/ih9gfzDcpTs?si=ftrj4waKqy7NPI6x"
+                                src="https://www.youtube.com/embed/zghNdJIAC5w?si=kCFWInL9XKmhz0PJ"
                             />
                     </div>
                 </div>
