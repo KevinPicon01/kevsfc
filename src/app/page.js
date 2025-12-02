@@ -24,6 +24,7 @@ export default async function Page() {
     const channelId = "UCUIjrgbNZn8rmUeAEguB_kQ";
     const apiKey = process.env.YOUTUBE_API_KEY;
 
+    // Contador de suscriptores (ya existente)
     let subscriberCount = 'N/A';
     if (apiKey) {
         try {
@@ -36,8 +37,79 @@ export default async function Page() {
         } catch (error) {
             console.error('Error fetching subscriber count:', error);
         }
-    } else {
-        console.warn('YOUTUBE_API_KEY not set. Subscriber count will be N/A.');
+    }
+
+    // NUEVO: Obtener el Short más visto
+    let mostViewedShort = null;
+    if (apiKey) {
+        try {
+            // Paso 1: Obtener playlist de uploads
+            const uploadsUrl = `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`;
+            const uploadsRes = await fetch(uploadsUrl);
+            if (uploadsRes.ok) {
+                const uploadsData = await uploadsRes.json();
+                const uploadsPlaylistId = uploadsData.items[0]?.contentDetails?.relatedPlaylists?.uploads;
+
+                if (uploadsPlaylistId) {
+                    // Paso 2: Listar items de la playlist, ordenados por viewCount
+                    const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&order=viewCount&key=${apiKey}`;
+                    const playlistRes = await fetch(playlistUrl);
+                    if (playlistRes.ok) {
+                        const playlistData = await playlistRes.json();
+                        const videoIds = playlistData.items.map(item => item.snippet.resourceId.videoId);
+
+                        if (videoIds.length > 0) {
+                            // Paso 3: Obtener detalles (duración y vistas) para filtrar Shorts
+                            const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=${videoIds.join(',')}&key=${apiKey}`;
+                            const detailsRes = await fetch(detailsUrl);
+                            if (detailsRes.ok) {
+                                const detailsData = await detailsRes.json();
+                                let candidates = detailsData.items
+                                    .filter(video => {
+                                        const duration = video.contentDetails.duration; // e.g., "PT0M45S"
+                                        const seconds = parseDurationToSeconds(duration);
+                                        const views = parseInt(video.statistics.viewCount) || 0;
+                                        return seconds <= 60 && seconds > 0 && views > 0; // Es Short y tiene vistas
+                                    })
+                                    .sort((a, b) => (parseInt(b.statistics.viewCount) || 0) - (parseInt(a.statistics.viewCount) || 0));
+
+                                if (candidates.length > 0) {
+                                    const topShort = candidates[0];
+                                    const snippetRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${topShort.id}&key=${apiKey}`);
+                                    if (snippetRes.ok) {
+                                        const snippetData = await snippetRes.json();
+                                        const snippet = snippetData.items[0]?.snippet;
+                                        mostViewedShort = {
+                                            id: topShort.id,
+                                            title: snippet?.title || 'Short sin título',
+                                            views: topShort.statistics.viewCount || '0',
+                                            thumbnail: snippet?.thumbnails?.medium?.url || '',
+                                            duration: parseDurationToSeconds(topShort.contentDetails.duration),
+                                        };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching most viewed short:', error);
+        }
+    }
+
+// Función segura para convertir duración ISO 8601 → segundos
+    function parseDurationToSeconds(duration) {
+        if (!duration || typeof duration !== 'string') return 999; // fallback: asumir que no es short
+
+        const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+        if (!match) return 999; // formato raro → no es short
+
+        const hours = parseInt(match[1] || 0);
+        const minutes = parseInt(match[2] || 0);
+        const seconds = parseInt(match[3] || 0);
+
+        return hours * 3600 + minutes * 60 + seconds;
     }
 
     return (
@@ -124,6 +196,45 @@ export default async function Page() {
                 </div>
             </section>
 
+            {/* NUEVA SECCIÓN: Short Más Visto – Formato vertical perfecto */}
+            <section className="mx-auto max-w-5xl px-6 pb-16">
+                <h2 className="text-3xl font-bold text-center mb-8" style={{ color: RED }}>
+                    Short Más Visto
+                </h2>
+
+                {mostViewedShort ? (
+                    <div className="flex justify-center">
+                        {/* Contenedor centrado que fuerza 9:16 */}
+                        <div className="relative w-full max-w-sm overflow-hidden rounded-2xl shadow-2xl border border-neutral-800">
+                            {/* Ratio exacto 9:16 */}
+                            <div className="aspect-[9/16] relative">
+                                <iframe
+                                    src={`https://www.youtube.com/embed/${mostViewedShort.id}?rel=0&modestbranding=1`}
+                                    title={mostViewedShort.title}
+                                    allowFullScreen
+                                    className="absolute inset-0 w-full h-full"
+                                    loading="lazy"
+                                />
+                            </div>
+
+                            {/* Info debajo del video (como en móvil, bonito en desktop) */}
+                            <div className="bg-neutral-900/80 backdrop-blur p-4 border-t border-neutral-800">
+                                <p className="font-semibold line-clamp-2 text-sm leading-tight">
+                                    {mostViewedShort.title}
+                                </p>
+                                <p className="text-xs text-neutral-400 mt-1">
+                                    {mostViewedShort.views} vistas
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="text-center py-12 text-neutral-500">
+                        <p>Cargando el golazo más visto del canal...</p>
+                    </div>
+                )}
+            </section>
+
             {/* Beneficios – tarjetas con hover brutal */}
             <section className="mx-auto max-w-6xl px-6 pb-20">
                 <h2 className="text-3xl font-bold text-center mb-12" style={{ color: RED }}>
@@ -177,8 +288,7 @@ export default async function Page() {
     );
 }
 
-/* ====== Componentes reutilizables (todos funcionan) ====== */
-
+/* ====== Componentes reutilizables (sin cambios) ====== */
 function SideRails() {
     return (
         <>
@@ -273,7 +383,7 @@ function SoccerAnim() {
     );
 }
 
-/* Íconos (sin errores) */
+/* Íconos (sin cambios) */
 function YouTubeIcon({ size = 24, color = "currentColor" }) {
     return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
