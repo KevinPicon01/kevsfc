@@ -20,7 +20,7 @@ const benefits = [
 
 export default async function Page() {
     const channelUrl = "https://www.youtube.com/channel/UCUIjrgbNZn8rmUeAEguB_kQ";
-    const latestVideoId = "QMKAkyKaT14";
+    const latestVideoId = "gvbbdiHmcOk";
     const channelId = "UCUIjrgbNZn8rmUeAEguB_kQ";
     const apiKey = process.env.YOUTUBE_API_KEY;
 
