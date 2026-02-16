@@ -20,7 +20,7 @@ const benefits = [
 
 export default async function Page() {
     const channelUrl = "https://www.youtube.com/channel/UCUIjrgbNZn8rmUeAEguB_kQ";
-    const latestVideoId = "UvI7BubDL2s";
+    const latestVideoId = "l75rJt0cXwk";
     const channelId = "UCUIjrgbNZn8rmUeAEguB_kQ";
     const apiKey = process.env.YOUTUBE_API_KEY;
     // Contador de suscriptores (ya existente)
