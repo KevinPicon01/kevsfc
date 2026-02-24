@@ -29,6 +29,7 @@ export default function Patrocinadores() {
                                     fill
                                     className={styles.logo}
                                     sizes="160px"
+                                    unoptimized
                                 />
                             </div>
                         ) : (

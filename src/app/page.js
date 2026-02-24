@@ -178,6 +178,7 @@ export default function Home() {
                                 height={96}
                                 className={styles.avatarImg}
                                 priority
+                                unoptimized
                             />
                         </div>
                     </div>
@@ -191,6 +192,7 @@ export default function Home() {
                         height={120}
                         className={styles.logoImg}
                         priority
+                        unoptimized
                     />
                 </div>
 
