@@ -1,0 +1,372 @@
+/* ── SECTION ── */
+.section {
+    padding: 2rem 0;
+    overflow: hidden;
+}
+
+.header {
+    max-width: 960px;
+    margin: 0 auto 2rem;
+    padding: 0 1.5rem;
+}
+
+.label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+}
+
+.title {
+    font-family: 'Bebas Neue', 'Oswald', sans-serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+}
+
+.gold { color: var(--gold); }
+
+.sub {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.35);
+    transition: color 0.3s;
+    min-height: 1.2em;
+}
+
+/* ════════════════════════════════
+   FILTROS DE CONFEDERACIÓN
+════════════════════════════════ */
+.confRow {
+    max-width: 960px;
+    margin: auto;
+    padding: 3rem 0 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.confItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 100px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+}
+.confItem::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--conf-color);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.confItem:hover::before  { opacity: 0.08; }
+.confItem:hover {
+    border-color: var(--conf-color);
+    transform: translateY(-1px);
+}
+
+/* Estado activo — seleccionado */
+.confActive {
+    border-color: var(--conf-color) !important;
+    background: rgba(255,255,255,0.08) !important;
+    box-shadow: 0 0 0 1px var(--conf-color), 0 4px 16px rgba(0,0,0,0.3);
+    transform: translateY(-2px) !important;
+}
+.confActive::before { opacity: 0.14 !important; }
+
+.confDot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--conf-color);
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+.confActive .confDot {
+    transform: scale(1.3);
+    box-shadow: 0 0 6px var(--conf-color);
+}
+
+.confName {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.7);
+    transition: color 0.2s;
+    position: relative;
+}
+.confActive .confName { color: var(--white); font-weight: 600; }
+
+.confN {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.92rem;
+    color: var(--conf-color);
+    letter-spacing: 0.05em;
+    position: relative;
+}
+
+.confCheck {
+    font-size: 0.7rem;
+    color: var(--conf-color);
+    font-weight: 700;
+    position: relative;
+    animation: popIn 0.2s ease;
+}
+
+.clearBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    background: rgba(232, 19, 42, 0.1);
+    border: 1px solid rgba(232, 19, 42, 0.35);
+    color: #f87171;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 4px;
+}
+.clearBtn:hover {
+    background: rgba(232,19,42,0.18);
+    border-color: #f87171;
+    transform: translateY(-1px);
+}
+
+/* ════════════════════════════════
+   CARRUSEL (sin filtro)
+════════════════════════════════ */
+.carouselWrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 8px 0;
+}
+
+.fadeLeft, .fadeRight {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 120px;
+    z-index: 2;
+    pointer-events: none;
+}
+.fadeLeft  { left:  0; background: linear-gradient(to right, var(--dark) 0%, transparent 100%); }
+.fadeRight { right: 0; background: linear-gradient(to left,  var(--dark) 0%, transparent 100%); }
+
+.track {
+    display: flex;
+    gap: 14px;
+    width: max-content;
+    animation: scroll var(--duration, 55s) linear var(--direction, normal) infinite;
+    will-change: transform;
+}
+.track:hover { animation-play-state: paused; }
+
+@keyframes scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-33.333%); }
+}
+
+/* ════════════════════════════════
+   GRID FILTRADO
+════════════════════════════════ */
+.grid {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    animation: fadeInGrid 0.3s ease;
+}
+
+@keyframes fadeInGrid {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.empty {
+    color: rgba(245,240,232,0.3);
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.1em;
+    padding: 2rem;
+    text-align: center;
+    width: 100%;
+}
+
+/* ════════════════════════════════
+   BADGE DE EQUIPO
+════════════════════════════════ */
+.badge {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.2s, border-color 0.2s, background 0.2s, opacity 0.3s;
+    overflow: visible;
+}
+.badge:hover {
+    transform: translateY(-4px) scale(1.08);
+    border-color: var(--team-color, var(--gold));
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 10;
+}
+
+/* En grid: entrada escalonada */
+.filtered {
+    animation: popIn 0.25s ease both;
+}
+.filtered:nth-child(1)  { animation-delay: 0.00s; }
+.filtered:nth-child(2)  { animation-delay: 0.03s; }
+.filtered:nth-child(3)  { animation-delay: 0.06s; }
+.filtered:nth-child(4)  { animation-delay: 0.09s; }
+.filtered:nth-child(5)  { animation-delay: 0.12s; }
+.filtered:nth-child(6)  { animation-delay: 0.15s; }
+.filtered:nth-child(7)  { animation-delay: 0.18s; }
+.filtered:nth-child(8)  { animation-delay: 0.21s; }
+.filtered:nth-child(9)  { animation-delay: 0.24s; }
+.filtered:nth-child(10) { animation-delay: 0.27s; }
+.filtered:nth-child(11) { animation-delay: 0.30s; }
+.filtered:nth-child(12) { animation-delay: 0.33s; }
+.filtered:nth-child(13) { animation-delay: 0.36s; }
+.filtered:nth-child(14) { animation-delay: 0.39s; }
+.filtered:nth-child(15) { animation-delay: 0.42s; }
+.filtered:nth-child(16) { animation-delay: 0.45s; }
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.8) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Indicador de confederación en esquina superior derecha */
+.confDotBadge {
+    position: absolute;
+    top: 5px; right: 5px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--conf-color, var(--gold));
+    box-shadow: 0 0 4px var(--conf-color, var(--gold));
+    z-index: 3;
+}
+
+/* Glow del color del equipo al hover */
+.badgeGlow {
+    position: absolute;
+    inset: -1px;
+    border-radius: 12px;
+    background: var(--team-color, transparent);
+    opacity: 0;
+    filter: blur(14px);
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+.badge:hover .badgeGlow { opacity: 0.28; }
+
+/* ── Logo ── */
+.logoWrap {
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+}
+.logo {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    transition: filter 0.2s;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+.abbr {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    color: rgba(245, 240, 232, 0.7);
+}
+
+/* ── Tooltip ── */
+.tooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: rgba(5, 8, 16, 0.96);
+    border: 1px solid var(--team-color, rgba(255,255,255,0.15));
+    border-radius: 8px;
+    padding: 8px 12px;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s;
+    z-index: 20;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+.tooltipVisible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+.tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%; left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--team-color, rgba(255,255,255,0.15));
+}
+.tooltipName {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    text-transform: uppercase;
+}
+.tooltipMeta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.tooltipAbbr {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--team-color, var(--gold));
+}
+.tooltipConf {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    border-left: 1px solid rgba(255,255,255,0.15);
+    padding-left: 8px;
+}

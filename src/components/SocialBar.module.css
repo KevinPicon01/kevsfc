@@ -1,0 +1,222 @@
+/* ════════════════════════════════════════════
+   SOCIAL BAR — fondo con diseño
+════════════════════════════════════════════ */
+.bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 22px 2rem;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+
+  /* Fondo base: gradiente oscuro con toque azul */
+  background:
+          linear-gradient(135deg,
+          #07091a 0%,
+          #0a1128 40%,
+          #0d1635 60%,
+          #070914 100%
+          );
+}
+
+/* Líneas diagonales tipo estadio */
+.bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+          -55deg,
+          transparent 0px,
+          transparent 28px,
+          rgba(255, 255, 255, 0.018) 28px,
+          rgba(255, 255, 255, 0.018) 29px
+  );
+  pointer-events: none;
+}
+
+/* Brillo rojo difuso izquierda */
+.bar::after {
+  content: '';
+  position: absolute;
+  left: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  height: 200px;
+  background: radial-gradient(ellipse, rgba(232, 19, 42, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Brillo dorado difuso derecha — via pseudo en el wrapper interno */
+.barInner {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+  z-index: 2;
+}
+.barInner::after {
+  content: '';
+  position: absolute;
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  height: 200px;
+  background: radial-gradient(ellipse, rgba(245, 197, 24, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Línea dorada inferior */
+.bar .bottomLine {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(245, 197, 24, 0.0) 10%,
+          rgba(245, 197, 24, 0.5) 30%,
+          rgba(245, 197, 24, 0.8) 50%,
+          rgba(245, 197, 24, 0.5) 70%,
+          rgba(245, 197, 24, 0.0) 90%,
+          transparent 100%
+  );
+}
+
+/* Línea sutil superior */
+.bar .topLine {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,0.06) 30%,
+          rgba(255,255,255,0.1) 50%,
+          rgba(255,255,255,0.06) 70%,
+          transparent
+  );
+}
+
+/* ════════════════════════════════════════════
+   PILL
+════════════════════════════════════════════ */
+.pill {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px 10px 13px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+  color: var(--white);
+  overflow: hidden;
+  transition: transform 0.22s, border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  cursor: pointer;
+  /* Vidrio suave */
+  backdrop-filter: blur(6px);
+}
+
+.pill:hover {
+  transform: translateY(-3px);
+  border-color: var(--brand);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4), 0 0 0 1px var(--brand) inset;
+}
+
+/* Glow de color de marca al hover */
+.glow {
+  position: absolute;
+  inset: 0;
+  background: var(--brand-gradient);
+  opacity: 0;
+  transition: opacity 0.25s;
+  z-index: 0;
+  border-radius: inherit;
+}
+.pill:hover .glow { opacity: 0.14; }
+
+/* ── ICONO ── */
+.icon {
+  position: relative;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.65);
+  transition: color 0.2s, transform 0.22s;
+}
+.icon svg { width: 100%; height: 100%; }
+.pill:hover .icon {
+  color: var(--brand);
+  transform: scale(1.18);
+}
+
+/* ── INFO ── */
+.info {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1;
+}
+.network {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245, 240, 232, 0.45);
+  transition: color 0.2s;
+}
+.pill:hover .network { color: var(--brand); }
+
+.handle {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(245, 240, 232, 0.9);
+  letter-spacing: 0.01em;
+}
+
+/* ── BADGE ── */
+.badge {
+  position: relative;
+  z-index: 1;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  background: rgba(245, 197, 24, 0.12);
+  border: 1px solid rgba(245, 197, 24, 0.3);
+  border-radius: 100px;
+  padding: 2px 9px;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.pill:hover .badge {
+  background: rgba(245, 197, 24, 0.22);
+  box-shadow: 0 0 8px rgba(245, 197, 24, 0.3);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .bar          { padding: 14px 1rem; }
+  .barInner     { gap: 8px; }
+  .handle       { display: none; }
+  .pill         { padding: 8px 12px; gap: 7px; }
+}

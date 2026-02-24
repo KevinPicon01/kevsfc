@@ -1,0 +1,57 @@
+.ticker {
+  position: relative;
+  overflow: hidden;
+  background: var(--red);
+  padding: 10px 0;
+  /* Impide que el contenido se salga y cause scrollbar horizontal */
+  width: 100%;
+}
+
+/*
+  El truco del loop perfecto:
+  - .track contiene 2 bloques idénticos uno al lado del otro
+  - La animación mueve el track exactamente -50% (el ancho de 1 bloque)
+  - Al llegar al -50% la segunda copia ocupa exactamente el lugar de la primera
+  - El loop se reinicia sin ningún salto ni espacio vacío
+*/
+.track {
+  display: flex;
+  width: max-content;          /* se expande para contener los 2 bloques */
+  animation: ticker 28s linear infinite;
+  will-change: transform;
+}
+
+/* Cada bloque es una copia completa del contenido */
+.block {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  /* Padding derecho para que no queden pegados los bloques entre sí */
+  padding-right: 4rem;
+  flex-shrink: 0;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-family: 'Oswald', 'Impact', sans-serif;
+  font-size: 0.88rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+  padding-right: 1.5rem;
+}
+
+.sep {
+  color: var(--gold);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* La animación desplaza exactamente el 50% del total (= 1 bloque) */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
